@@ -119,9 +119,10 @@ namespace Coinbase
             const string BaseUri = "https://coinbase.com/api/v1/";
             
             var client = new RestClient( BaseUri );
-#if DEBUG
-            client.Proxy = new WebProxy( "http://localhost.:8888", false );
-#endif
+// This isn't really necessary - if you use Fiddler you can add the proxy in your web.config
+//#if DEBUG
+//            client.Proxy = new WebProxy( "http://localhost.:8888", false );
+//#endif
             client.Authenticator = GetAuthenticator();
             client.AddHandler( "application/json", new JsonNetDeseralizer( settings ) );
             return client;
