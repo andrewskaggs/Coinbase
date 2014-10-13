@@ -1,8 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
-MinimumVisualStudioVersion = 10.0.40219.1
+# Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Coinbase", "Coinbase\Coinbase.csproj", "{CBB355B9-6D99-43D7-ABD8-EF1EA39A3956}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Coinbase.Tests", "Coinbase.Tests\Coinbase.Tests.csproj", "{6BE02044-CDFA-4B33-A874-8D4AA86DFB84}"

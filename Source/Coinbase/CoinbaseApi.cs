@@ -178,10 +178,39 @@ namespace Coinbase
             var post = CreateRequest( "buttons/{code}/create_order" )
                 .AddUrlSegment( "code", code );
                 
-
             var resp = client.Execute<OrderResponse>(post);
 
             if ( resp.ErrorException != null )
+                throw resp.ErrorException;
+
+            return resp.Data;
+        }
+
+        public TransferResponse Transfer(BitcoinTransferRequest transferRequest)
+        {
+            var client = CreateClient();
+
+            var post = CreateRequest("transactions/send_money")
+                .AddBody(transferRequest);
+
+            var resp = client.Execute<TransferResponse>(post);
+
+            if (resp.ErrorException != null)
+                throw resp.ErrorException;
+
+            return resp.Data;
+        }
+
+        public TransferResponse Transfer(CurrencyTransferRequest transferRequest)
+        {
+            var client = CreateClient();
+
+            var post = CreateRequest("transactions/send_money")
+                .AddBody(new FakeTransaction() { Transaction = transferRequest});
+
+            var resp = client.Execute<TransferResponse>(post);
+
+            if (resp.ErrorException != null)
                 throw resp.ErrorException;
 
             return resp.Data;
@@ -440,5 +469,55 @@ namespace Coinbase
         [EnumMember( Value = "custom_small" )]
         CustomSmall,
         None
+    }
+
+    public abstract class TransferRequest
+    {
+        public string To { get; set; }    
+
+        public string Notes { get; set; }
+
+        [JsonProperty( "instant_buy" )]
+        public bool InstantBuy { get; set; }
+    }
+
+    public class BitcoinTransferRequest : TransferRequest
+    {
+        public decimal Amount { get; set; }
+    }
+
+    public class CurrencyTransferRequest : TransferRequest
+    {
+        [JsonProperty("amount_string")]
+        public string Amount { get; set; }
+
+        [JsonProperty("amount_currency_iso")]
+        public Currency Currency { get; set; }
+    }
+
+    public class TransferResponse
+    {
+        public bool Success { get; set; }
+    }
+
+    public class TransferTransaction
+    {
+        public string Id { get; set; }
+
+        [JsonProperty("created_at")]
+        [JsonConverter(typeof(IsoDateTimeConverter))]
+        public DateTime? CreatedAt { get; set; }
+
+        [JsonProperty( "hsh" )]
+        public string Hash { get; set; }
+
+        public string Notes { get; set; }
+
+        public string idem { get; set; }
+    }
+
+    public class FakeTransaction
+    {
+        public CurrencyTransferRequest Transaction { get; set; }
     }
 }
